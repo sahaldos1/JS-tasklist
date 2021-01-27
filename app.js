@@ -11,6 +11,9 @@ loadEventListeners();
 
 //event listeners function
 function loadEventListeners() {
+  //DOM loadevent
+  document.addEventListener("DOMContentLoaded", getTasks);
+
   //Add task event
 
   form.addEventListener("submit", addTask);
@@ -24,6 +27,40 @@ function loadEventListeners() {
 
   //filter tasks event
   filter.addEventListener("keyup", filterTasks);
+}
+
+//Get tasks function on page load
+
+function getTasks() {
+  //initialize task, check and see if there's anything there, if there isn't set it to an empty array, if there is set it to whatever is there
+  let tasks;
+
+  if (localStorage.getItem("tasks") === null) {
+    tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+  }
+
+  tasks.forEach(function (task) {
+    //create list element
+    const li = document.createElement("li");
+    //add class
+    li.className = "collection-item";
+    //create text node and append to li
+    li.appendChild(document.createTextNode(task));
+
+    //create new link element
+    const link = document.createElement("a");
+    //add class
+    link.className = "delete-item secondary-content";
+    //add icon html
+    link.innerHTML = '<i class="fa fa-remove"></i>';
+    //append link to li
+    li.appendChild(link);
+
+    //append li to ul
+    taskList.appendChild(li);
+  });
 }
 
 //Add Task functin
@@ -51,10 +88,28 @@ function addTask(e) {
   //append li to ul
   taskList.appendChild(li);
 
+  //store in local storage
+  storeTask(taskInput.value);
+
   //clear input
   taskInput.value = "";
 
   e.preventDefault();
+}
+
+//store task in local storage
+function storeTask(task) {
+  let tasks;
+
+  if (localStorage.getItem("tasks") === null) {
+    tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+  }
+
+  tasks.push(task);
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 //remove task
