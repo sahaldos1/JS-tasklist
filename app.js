@@ -7,13 +7,17 @@ const filter = document.querySelector("#filter");
 const taskInput = document.querySelector("#task");
 
 //Load all event listeners
-loadEventListerners();
+loadEventListeners();
 
 //event listeners function
-function loadEventListerners() {
+function loadEventListeners() {
   //Add task event
 
   form.addEventListener("submit", addTask);
+
+  //remove task event
+
+  taskList.addEventListener("click", removeTask);
 }
 
 //Add Task functin
@@ -45,4 +49,13 @@ function addTask(e) {
   taskInput.value = "";
 
   e.preventDefault();
+}
+
+//remove task
+function removeTask(e) {
+  if (e.target.parentElement.classList.contains("delete-item")) {
+    if (confirm("Are you sure?")) {
+      e.target.parentElement.parentElement.remove();
+    }
+  }
 }
